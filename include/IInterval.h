@@ -3,27 +3,27 @@
 #ifndef IINTERVAL_H
 #define IINTERVAL_H
 
-template<typename T>
+template<typename T, typename C>
 class IInterval {
-
 protected:
-	virtual IInterval& arithmetic_o(const char& op, const T& other) const = 0;
+	virtual C arithmetic_o(const char& op, const T& other) const = 0;
 public:
-	virtual ~IInterval() = default;
-
 	virtual T getTop() const = 0;
 	virtual T getBot() const = 0;
 
-	virtual IInterval& operator+(const IInterval& other) const = 0;
-	virtual IInterval& operator-(const IInterval& other) const = 0;
-	virtual IInterval& operator*(const IInterval& other) const = 0;
-	virtual IInterval& operator/(const IInterval& other) const = 0;
-	virtual bool operator==(const IInterval& other) = 0;
+	virtual C operator+(const C& other) const = 0;
+	virtual C operator-(const C& other) const = 0;
+	virtual C operator*(const C& other) const = 0;
+	virtual C operator/(const C& other) const = 0;
+	virtual C operator^(const T& other) const = 0;
+	virtual bool operator==(const C& other) const = 0;
 
-	IInterval& operator+(const T& other) const;
-	IInterval& operator-(const T& other) const;
-	IInterval& operator*(const T& other) const;
-	IInterval& operator/(const T& other) const;
+	C operator+(const T& other) const;
+	C operator-(const T& other) const;
+	C operator*(const T& other) const;
+	C operator/(const T& other) const;
+
+	virtual ~IInterval() = default;
 };
 
 #endif

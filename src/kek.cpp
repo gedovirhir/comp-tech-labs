@@ -4,79 +4,118 @@
 #include <functional>
 #include <string>
 
+
+/*
+
+ - просто int get_n {return n} возвращает значение, которое можно только скопировать
+ - int& get_n {return n} возвращает ссылку на значение, которое можно принять в int и скопировать,
+     либо в int& и принять объект по ссылке
+ - int* get_n {retrun &n} возвращает указатель на объект в виде переменной-указателя
+
+ [object
+  
+*/
+
 using namespace std;
 
-// Arithmetic interface
-class Arithmetic {
+template <typename T, typename C>
+class Interface {
 public:
-    virtual Arithmetic& operator+(const Arithmetic& other) = 0;
-    virtual Arithmetic& operator-(const Arithmetic& other) = 0;
-    virtual Arithmetic& operator*(const Arithmetic& other) = 0;
-    virtual Arithmetic& operator/(const Arithmetic& other) = 0;
+    // Method that accepts an instance of the same class
+    void doSomethingWithSelf(const T& obj) {
+        // Call a method on the provided object
+        obj.someMethod();
+    }
 
-    virtual void display() const = 0; // Just for demonstration
-    virtual ~Arithmetic() {}
+    // Pure virtual method, to be implemented by subclasses
+    virtual void someMethod() = 0;
 };
 
-// Class implementing the arithmetic operations for integers
-class Integer : public Arithmetic {
-private:
-    int value;
-
+// Example implementation of the interface
+template <typename T>
+class MyClass : public Interface<MyClass<T>, T> {
 public:
-    Integer(int val) : value(val) {}
+    int kekesh;
 
-    Integer& operator+(const Arithmetic& other) override {
-        const Integer& otherInteger = dynamic_cast<const Integer&>(other);
-        
-        Integer new_int = *this;
+    MyClass(int kek) : kekesh(kek) {
+        //_id();
+    }
+    
+    void _id() {
+        std::cout << this << std::endl;
+    };
 
-        new_int.value -= otherInteger.value;
-        return new_int;
+    int get_k() {
+        return 123;
     }
 
-    Integer& operator-(const Arithmetic& other) override {
-        const Integer& otherInteger = dynamic_cast<const Integer&>(other);
-        Integer new_int = *this;
-        
-        new_int.value -= otherInteger.value;
-        return new_int;
-    }
-
-    Integer& operator*(const Arithmetic& other) override {
-        const Integer& otherInteger = dynamic_cast<const Integer&>(other);
-        value *= otherInteger.value;
-        return *this;
-    }
-
-    Integer& operator/(const Arithmetic& other) override {
-        const Integer& otherInteger = dynamic_cast<const Integer&>(other);
-        if (otherInteger.value != 0)
-            value /= otherInteger.value;
-        return *this;
-    }
-
-    void display() const override {
-        std::cout << "Integer value: " << value << std::endl;
+    // Implement the pure virtual method
+    void someMethod() override {
+        // Define the behavior of the method
+        // For example:
+        std::cout << "Doing something in MyClass\n";
     }
 };
 
-class MegaKek {
-private:
-    int val;
-public:
-    MegaKek(int new_val) : val(move(new_val)) {
-        cout << &new_val << endl;
-        cout << &(this->val);
-    }
-
-    int getVal() {
-        //int kek = 1;
-        //cout << &kek << endl;
-        return val;
-    }
-};
-
-int main() {
-    return 1;
+MyClass<int> get_myclass() {
+    MyClass<int> cock = MyClass<int>(1);
+    
+    return cock;
 }
+
+int kek2() {
+    int k = 2;
+    std::cout << &k << std::endl;
+    return k;
+};  
+
+struct X {
+    int cock;
+
+    X(int c) : cock(c) { cout << "X()" << endl; }
+    X(X const&) { cout << "X(X const&)" << endl; }
+    X(X&&) = default;
+    ~X() { 
+        cout << "~X()" << endl;
+    }
+};
+
+
+X keke2(X&& cock) {
+    return cock;
+}
+
+template <typename T> T stub(T&& cock) {
+    return cock;
+}
+
+
+
+
+template <typename T>
+T(*keke)(T&& cock) = &stub;
+
+
+
+int foox(const int& k) {
+    return k;
+}
+template <typename T>
+T pzd(const T& a) {
+    return a;
+}
+template <typename T>
+T pzd(T&& a) {
+    return pzd<T>(a);
+}
+
+//int main() {
+//    X new_k(1);
+//
+//    //int kke = pzd<int>(1);
+//    X old_k = keke<X>(X(1));
+//    //X copy_k = keke(new_k);
+//
+//
+//    cout << "DEAD END" << endl;
+//}
